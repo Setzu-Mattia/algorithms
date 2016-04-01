@@ -36,9 +36,8 @@ func quicksort(list []int, lower int, upper int) {
 }
 
 func pivot(list []int, lower int, upper int) int {
-	ran := upper - lower
-
-	randomIndex := lower + rand.Intn(ran)
+	// Las Vegas index
+	randomIndex := lower + rand.Intn(upper-lower)
 	down := lower
 	up := upper
 	lasVegas := list[randomIndex]
@@ -54,6 +53,7 @@ func pivot(list []int, lower int, upper int) int {
 		swap(list[:], down, up)
 	}
 
+	// Off by one down
 	if down > 0 && list[down] > lasVegas && list[down-1] >= lasVegas {
 		down--
 	}
