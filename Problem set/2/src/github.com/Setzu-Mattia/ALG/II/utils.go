@@ -1,6 +1,9 @@
 package main
 
-import "math/rand"
+import (
+	"math"
+	"math/rand"
+)
 
 const minCutSize int = 2
 
@@ -70,15 +73,15 @@ func (g *Graph) collapse(a, b Node, id int) *Graph {
 	return g
 }
 
-func (g *Graph) blindCut() {
-	if len(g.nodes) < minCutSize {
-		return
+func (g *Graph) blindCut(survivors int) int {
+	if len(g.nodes) < survivors {
+		return 0
 	}
 
 	nodes := g.nodes
 	survivorNodesIndex := rand.Intn(len(g.nodes) - 1)
 
-	for i, id := 0, len(g.nodes)*len(g.nodes); i < len(nodes)-minCutSize; i++ {
+	for i, id := 0, len(g.nodes)*len(g.nodes); i < len(nodes)-survivors; i++ {
 		if i == survivorNodesIndex {
 			continue
 		}
@@ -88,12 +91,41 @@ func (g *Graph) blindCut() {
 
 		g.collapse(aNode, bNode, id)
 	}
+
+	return len(g.edges)
 }
 
-func (g *Graph) kargerMinCut(cuts int) {
-	//edgesN := len(g.edges)
+func (g *Graph) kargerMinCut(cuts int) int {
+	var h *Graph
+	paths := math.MaxInt8
 
 	for i := 0; i < cuts; i++ {
+		h = g.copy()
 
+		h.blindCut(minCutSize)
+		if len(h.edges) < paths {
+			paths = len(g.edges)
+		}
 	}
+
+	return paths
+}
+
+func (g *Graph) notSoBlindCut(contractLimit int, survivors int) int {
+	// Blind cut up to contractLimit
+	h := g.copy()
+
+	// Contract: cut up to contract
+	h.blindCut(contractLimit)
+	j, k := g.copy(), g.copy()
+
+	// Cut to minimum size
+	jLen := j.blindCut(minCutSize)
+	kLen := k.blindCut(minCutSize)
+
+	if jLen <= kLen {
+		return jLen
+	}
+
+	return kLen
 }

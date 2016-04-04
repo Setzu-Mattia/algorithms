@@ -59,8 +59,4 @@ func main() {
 	}
 
 	g.printGraph()
-
-	h := g.copy()
-
-	h.printGraph()
 }
