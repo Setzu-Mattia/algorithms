@@ -46,3 +46,37 @@ func (g *Graph) addEdges(e []Edge) {
 		(*g).edges = append((*g).edges, e[i])
 	}
 }
+
+func (g *Graph) copy() *Graph {
+	h := EmptyGraph()
+
+	for i := 0; i < len(g.nodes); i++ {
+		val := g.nodes[i].val
+		node := NewNode(val)
+
+		h.addNode(*node)
+	}
+
+	for i := 0; i < len(g.edges); i++ {
+		edge := g.edges[i]
+		mNode := edge.m
+		nNode := edge.n
+
+		var hMNode Node
+		var hNNode Node
+
+		for j := 0; j < len(h.nodes); j++ {
+			if h.nodes[j].val == mNode.val {
+				hMNode = mNode
+			}
+			if h.nodes[j].val == nNode.val {
+				hNNode = nNode
+			}
+		}
+
+		hEdge := NewEdge(hMNode, hNNode)
+		h.addEdge(*hEdge)
+	}
+
+	return h
+}

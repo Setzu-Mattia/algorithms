@@ -89,3 +89,11 @@ func (g *Graph) blindCut() {
 		g.collapse(aNode, bNode, id)
 	}
 }
+
+func (g *Graph) kargerMinCut(cuts int) {
+	//edgesN := len(g.edges)
+
+	for i := 0; i < cuts; i++ {
+
+	}
+}

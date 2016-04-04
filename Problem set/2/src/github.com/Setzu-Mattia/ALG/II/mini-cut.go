@@ -36,16 +36,16 @@ func setUp() {
 	}
 }
 
-func printGraph() {
-	nCount := len((*g).nodes)
-	eCount := len((*g).edges)
+func (h *Graph) printGraph() {
+	nCount := len((*h).nodes)
+	eCount := len((*h).edges)
 
 	fmt.Println("*------------------*")
 	for i := 0; i < nCount; i++ {
-		fmt.Println("Node:", (*g).nodes[i].val)
+		fmt.Println("Node:", (*h).nodes[i].val)
 	}
 	for i := 0; i < eCount; i++ {
-		fmt.Println("Edge:", (*g).edges[i].m.val, (*g).edges[i].n.val)
+		fmt.Println("Edge:", (*h).edges[i].m.val, (*h).edges[i].n.val)
 	}
 	fmt.Println("*------------------*")
 }
@@ -58,7 +58,9 @@ func main() {
 		nodes = append(nodes, (*g).nodes[i])
 	}
 
-	printGraph()
-	g.blindCut()
-	printGraph()
+	g.printGraph()
+
+	h := g.copy()
+
+	h.printGraph()
 }
