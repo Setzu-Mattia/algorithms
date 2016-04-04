@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "math/rand"
 
 var (
 	g     *Graph
@@ -9,6 +10,7 @@ var (
 )
 
 const nodesCount int = 10
+const maxEdgesPerNode int = 7
 
 func setUp() {
 	g = EmptyGraph()
@@ -21,10 +23,16 @@ func setUp() {
 	}
 
 	for i := 0; i < nodesCount-1; i++ {
+		// Random number of edges per node, ranging
+		// from 1 to maxEdgesPerNode + 1
+		edgesCount := rand.Intn(maxEdgesPerNode) + 1
 		edge := NewEdge(nodes[i], nodes[i+1])
-		edges = append(edges, *edge)
 
-		g.addEdge(*edge)
+		for j := 0; j < edgesCount; j++ {
+			edges = append(edges, *edge)
+			g.addEdge(*edge)
+		}
+
 	}
 }
 
