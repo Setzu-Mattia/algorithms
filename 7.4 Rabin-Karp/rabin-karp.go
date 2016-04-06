@@ -16,8 +16,8 @@ func main() {
 }
 
 func rabinKarp(str, pattern string) int {
-	hString := rabinFingerprint(str)
-	hPattern := rabinFingerprint(pattern)
+	hString := rabinFingerprint(str, pattern)
+	hPattern := rabinFingerprint(pattern, pattern)
 	strLen := len(str)
 	patternLen := len(pattern)
 
@@ -28,15 +28,17 @@ func rabinKarp(str, pattern string) int {
 			}
 		}
 
-		hString = rabinFingerprint(str[i+1 : i+patternLen])
+		hString = rabinFingerprint(str[i+1 : i+patternLen], pattern)
 	}
 
 	return -1
 }
 
-func rabinFingerprint(str string) *big.Int {
+func rabinFingerprint(str string, pattern string) *big.Int {
 	fingerPrint := big.NewInt(0)
 	n := len(str)
+	m := len(pattern)
+	l := int64(math.Log(float64((n^2)*m)))
 	pol := big.NewInt(0)
 	prime := big.NewInt(0)
 
@@ -45,14 +47,8 @@ func rabinFingerprint(str string) *big.Int {
 		pol = z
 	}
 
-	lowerBound := int64(2 * n)
-	lowerBoundK := int64(float64(n) / math.Log(float64(n)))
+	prime = big.NewInt(pickPrime((int64(n ^ 2)) * l))
 
-	if lowerBound >= lowerBoundK {
-		prime = big.NewInt(pickPrime(lowerBound))
-	} else {
-		prime = big.NewInt(pickPrime(lowerBoundK))
-	}
 
 	fingerPrint = fingerPrint.Mod(pol, prime)
 	return fingerPrint
@@ -74,7 +70,7 @@ func pickPrime(k int64) int64 {
 	ch := make(chan int64)
 	go generate(ch)
 
-	for prime < k || randIndex > 0 {
+	for prime < k {
 		prime = <-ch
 		ch1 := make(chan int64)
 		go filter(ch, ch1, prime)
