@@ -24,5 +24,8 @@ _testmain.go
 *.test
 *.prof
 
+### Notes ###
+*.pdf
+
 ### TMP ###
 tmp
