@@ -16,7 +16,7 @@ void merge_sort(int *A,int n);
 
 void merge_sort(int *A,int n);
 
-long paletta_sort(int N, int V[]) {
+long paletta_sort(int N, int* V) {
     int even_size = ceil(N / 2) + 1;
     int odd_size = floor(N / 2);
     int* even = (int*) malloc(even_size * sizeof(int));
@@ -88,7 +88,6 @@ void merge(int *A,int *L,int leftCount,int *R,int rightCount) {
 		if(L[i]  < R[j]) A[k++] = L[i++];
 		else {
             flips++;
-            printf("Flipping %d and %d\n", A[k], R[j]);
             A[k++] = R[j++];
         }
 	}
