@@ -12,9 +12,7 @@ long paletta_sort(int N, int V[]);
 /* Is Marco really a good hamburger flipper? */
 int are_you_loving_it(int* even, int* odd, int even_size, int odd_size);
 
-void merge_sort(int *A,int n);
-
-void merge_sort(int *A,int n);
+void flip_order(int *list,int n);
 
 long paletta_sort(int N, int* V) {
     int even_size = ceil(N / 2) + 1;
@@ -48,8 +46,8 @@ long paletta_sort(int N, int* V) {
     if (N == 3 && V[0] <= V[2]
         && V[1] >= V[0] && V[1] <= V[2]) return 0;
 
-    merge_sort(even, even_size);
-    merge_sort(odd, odd_size);
+    flip_order(even, even_size);
+    flip_order(odd, odd_size);
 
     return are_you_loving_it(even, odd, even_size, odd_size) ? flips : -1;
 }
@@ -76,44 +74,34 @@ int are_you_loving_it(int* even, int* odd, int even_size, int odd_size) {
     return fail;
 }
 
-void merge(int *A,int *L,int leftCount,int *R,int rightCount) {
-	int i,j,k;
+void flip_order(int *list,int n) {
+    int i = 0, j = 1;
+    int direction = 1;
 
-	// i - to mark the index of left aubarray (L)
-	// j - to mark the index of right sub-raay (R)
-	// k - to mark the index of merged subarray (A)
-	i = 0; j = 0; k =0;
-
-	while(i<leftCount && j< rightCount) {
-		if(L[i]  < R[j]) A[k++] = L[i++];
-		else {
-            flips++;
-            A[k++] = R[j++];
+    do {
+        switch(direction) {
+        case 1:
+            if (list[i] > list[j]) {
+                flips = flips + (j - i);
+                if (i >= 0) {
+                    j = i;
+                    i--;
+                }
+            } else {
+                i++;
+                j++;
+            }
+        break;
+        case -1:
+            if (list[i] > list[j]) {
+                flips = flips + (j - 1);
+                i = 0;
+                j = 1;
+            } else {
+                i++;
+                j++;
+            }
+        break;
         }
-	}
-	while(i < leftCount) A[k++] = L[i++];
-	while(j < rightCount) A[k++] = R[j++];
-}
-
-// Recursive function to sort an array of integers.
-void merge_sort(int *A,int n) {
-	int mid,i, *L, *R;
-	if(n < 2) return; // base condition. If the array has less than two element, do nothing.
-
-	mid = n/2;  // find the mid index.
-
-	// create left and right subarrays
-	// mid V (from index 0 till mid-1) should be part of left sub-array
-	// and (n-mid) V (from mid to n-1) will be part of right sub-array
-	L = (int*)malloc(mid*sizeof(int));
-	R = (int*)malloc((n- mid)*sizeof(int));
-
-	for(i = 0;i<mid;i++) L[i] = A[i]; // creating left subarray
-	for(i = mid;i<n;i++) R[i-mid] = A[i]; // creating right subarray
-
-	merge_sort(L,mid);  // sorting the left subarray
-	merge_sort(R,n-mid);  // sorting the right subarray
-	merge(A,L,mid,R,n-mid);  // Merging L and R into A as sorted list.
-        free(L);
-        free(R);
+    } while(j < n);
 }
