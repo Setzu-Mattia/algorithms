@@ -121,3 +121,14 @@ input.tx
 
 ### GRADERS ###
 grader.c
+
+
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+### Intellij ###
+./project/
